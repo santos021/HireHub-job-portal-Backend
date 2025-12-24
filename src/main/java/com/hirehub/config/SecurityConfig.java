@@ -1,6 +1,5 @@
 package com.hirehub.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,6 +45,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/employer/**").hasRole("EMPLOYER")
 				.requestMatchers("/api/user/**").hasRole("USER")
 				.requestMatchers("/api/jobseeker/**").hasRole("USER")
+//				.requestMatchers("/api/jobseeker/**").authenticated() // for debugging
 				.anyRequest().authenticated()
 				);
 		http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));

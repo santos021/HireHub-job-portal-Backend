@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/jobseeker/resume")
-@PreAuthorize("hasAuthority('ROLE_USER')")
+@PreAuthorize("hasRole('USER')")
 @RequiredArgsConstructor
 public class ResumeController {
 	

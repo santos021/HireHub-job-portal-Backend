@@ -13,4 +13,12 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 	List<JobApplication> findByApplicant(User user);
 	
 	List<JobApplication> findByJob(Job job);
+	
+	long countByJob_PostedBy(User employer);
+
+    long countByJob_PostedByAndStatus(User employer, String status);
+
+    List<JobApplication> findTop5ByJob_PostedByOrderByAppliedAtDesc(User employer);
+    
+    long countByJob(Job job);
 }

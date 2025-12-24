@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hirehub.dto.JobRequest;
+import com.hirehub.dto.JobResponse;
 import com.hirehub.entity.Job;
 import com.hirehub.entity.User;
+import com.hirehub.repository.JobApplicationRepository;
 import com.hirehub.repository.UserRepository;
 import com.hirehub.service.JobService;
 
@@ -29,6 +31,7 @@ public class EmployerJobController {
 	
 	private final JobService jobService;
 	private final UserRepository userRepository;
+	private final JobApplicationRepository applicationRepository;
 	
 	public User getCurrentEmployer(Principal principal) {
 		return userRepository.findByEmail(principal.getName())
@@ -51,9 +54,20 @@ public class EmployerJobController {
 		return "Job Deleted successfully";
 	}
 	
-	@GetMapping
-	public List<Job> getEmployerJobs(Principal principal){
-		return jobService.getEmployerJobs(getCurrentEmployer(principal));
+	@GetMapping("/all-jobs")
+	public List<JobResponse> getEmployerJobs(Principal principal){
+		User employer = getCurrentEmployer(principal);
+
+	    List<Job> jobs = jobService.getEmployerJobs(employer);
+
+	    return jobs.stream().map(job -> new JobResponse(
+	    				job.getId(),
+	    				job.getTitle(),
+	    				job.getJobType(),
+	    				job.isApproved(),
+	    				job.getCreatedAt(),
+	    				applicationRepository.countByJob(job)
+	    		)).toList();
 	}
 	
 }

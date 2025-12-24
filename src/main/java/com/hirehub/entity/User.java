@@ -1,5 +1,6 @@
 package com.hirehub.entity;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -55,4 +56,8 @@ public class User {
 	private String address;
 	private String category;
 	private String languages;
+	
+	private boolean active = true;
+	
+	private LocalDateTime createdAt =LocalDateTime.now();
 }

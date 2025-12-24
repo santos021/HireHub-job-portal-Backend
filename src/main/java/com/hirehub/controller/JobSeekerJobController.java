@@ -35,12 +35,12 @@ public class JobSeekerJobController {
 	}
 	
 	@GetMapping("/search")
-	public List<Job> searchJobs(@RequestParam String keyward){
+	public List<Job> searchJobs(@RequestParam String keyword){
 		return jobRepository.findByApprovedTrue()
 				.stream()
-				.filter(job -> job.getTitle().toLowerCase().contains(keyward.toLowerCase())
-						|| job.getSkills().toLowerCase().contains(keyward.toLowerCase())
-						|| job.getLocation().toLowerCase().contains(keyward.toLowerCase()))
+				.filter(job -> job.getTitle().toLowerCase().contains(keyword.toLowerCase())
+						|| job.getSkills().toLowerCase().contains(keyword.toLowerCase())
+						|| job.getLocation().toLowerCase().contains(keyword.toLowerCase()))
 				.toList();
 	}
 }

@@ -27,8 +27,9 @@ public class UserPrincipal implements UserDetails {
 		this.password = user.getPassword();
 		this.roles = user.getRoles().stream().map(r -> r.getName()).collect(Collectors.toSet());
 		this.authorities = this.roles.stream()
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toSet());
+		        .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+		        .map(SimpleGrantedAuthority::new)
+		        .collect(Collectors.toSet());
 	}
 	
 	@Override

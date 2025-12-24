@@ -39,18 +39,33 @@ public class AuthController {
 	// -------------------- LOGIN --------------------
 	@PostMapping("/login")
 	public AuthResponse login(@RequestBody AuthRequest req) {
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword()));
-		
-		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-		
-		String token = jwtUtil.generateToken(userPrincipal.getUsername(), userPrincipal.getRoles().stream().toList());
-		
-		return new AuthResponse(
-				token,
-				userPrincipal.getEmail(),
-				userPrincipal.getRoles().stream().findFirst().orElse("ROLE_USER")
-				);
+	    try {
+	        Authentication authentication =
+	            authenticationManager.authenticate(
+	                new UsernamePasswordAuthenticationToken(
+	                    req.getEmail(), req.getPassword()
+	                )
+	            );
+
+	        UserPrincipal userPrincipal =
+	            (UserPrincipal) authentication.getPrincipal();
+
+	        String token = jwtUtil.generateToken(
+	            userPrincipal.getUsername(),
+	            userPrincipal.getRoles().stream().toList()
+	        );
+
+	        return new AuthResponse(
+	            token,
+	            userPrincipal.getEmail(),
+	            userPrincipal.getRoles().stream().findFirst().orElse("ROLE_USER")
+	        );
+
+	    } catch (RuntimeException ex) {
+	        throw new RuntimeException(ex.getMessage());
+	    }
 	}
+	
+	
 
 }

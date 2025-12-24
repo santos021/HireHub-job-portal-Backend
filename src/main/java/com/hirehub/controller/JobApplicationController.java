@@ -32,6 +32,9 @@ public class JobApplicationController {
 				.orElseThrow(() -> new RuntimeException("User not found!"));
 		Job job = jobRepository.findById(jobId)
 				.orElseThrow(() -> new RuntimeException("Job not found!"));
+		
+//		System.out.println("Principal = " + principal);
+		
 		if (!job.isApproved()) {
 			throw new RuntimeException("Cannot apply to an unapproved job!");
 		}
