@@ -16,49 +16,57 @@ import lombok.Getter;
 public class UserPrincipal implements UserDetails {
 	
 	private final Long id;
-	private final String email;
-	private final String password;
-	private final Set<String> roles;
-	private final Collection<? extends GrantedAuthority> authorities;
-	
-	public UserPrincipal(User user) {
-		this.id = user.getId();
-		this.email = user.getEmail();
-		this.password = user.getPassword();
-		this.roles = user.getRoles().stream().map(r -> r.getName()).collect(Collectors.toSet());
-		this.authorities = this.roles.stream()
-		        .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
-		        .map(SimpleGrantedAuthority::new)
-		        .collect(Collectors.toSet());
-	}
-	
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
-	
-	@Override
-	public String getPassword() {
-		return password;
-	}
-	
-	@Override
-	public String getUsername() {
-		return email;
-	}
-	
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-	
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-	
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+    private final String email;
+    private final String password;
+    private final boolean active;
+    private final Set<String> roles;
+    private final Collection<? extends GrantedAuthority> authorities;
+
+    public UserPrincipal(User user) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.active = user.isActive();
+
+        this.roles = user.getRoles()
+                .stream()
+                .map(role -> role.getName())
+                .collect(Collectors.toSet());
+
+        this.authorities = this.roles.stream()
+                .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    // Critical: disable login if admin deactivates user
+    @Override
+    public boolean isEnabled() {
+        return active;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return active;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 }

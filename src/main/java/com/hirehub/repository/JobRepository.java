@@ -18,4 +18,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 	long countByPostedBy(User employer);
 
     long countByPostedByAndApproved(User employer, boolean approved);
+    
+    List<Job> findByApprovedFalse();
 }
