@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hirehub.dto.JobRequest;
 import com.hirehub.dto.JobResponse;
 import com.hirehub.entity.Job;
+import com.hirehub.entity.JobStatus;
 import com.hirehub.entity.User;
 import com.hirehub.repository.JobApplicationRepository;
 import com.hirehub.repository.UserRepository;
@@ -64,7 +65,7 @@ public class EmployerJobController {
 	    				job.getId(),
 	    				job.getTitle(),
 	    				job.getJobType(),
-	    				job.isApproved(),
+	    				job.getStatus(),
 	    				job.getCreatedAt(),
 	    				applicationRepository.countByJob(job)
 	    		)).toList();

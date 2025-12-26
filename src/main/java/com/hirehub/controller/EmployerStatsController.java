@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hirehub.entity.JobStatus;
 import com.hirehub.entity.User;
 import com.hirehub.repository.JobApplicationRepository;
 import com.hirehub.repository.JobRepository;
@@ -33,7 +34,7 @@ public class EmployerStatsController {
         Long employerId = employer.getId();
 
         long totalJobs = jobRepository.countByPostedBy(employer);
-        long activeJobs = jobRepository.countByPostedByAndApproved(employer, true);
+        long activeJobs = jobRepository.countByPostedByAndStatus(employer, JobStatus.APPROVED);
         long totalApplications = applicationRepository.countByJob_PostedBy(employer);
         long shortlisted = applicationRepository.countByJob_PostedByAndStatus(employer, "SHORTLISTED");
 

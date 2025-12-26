@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hirehub.entity.Job;
+import com.hirehub.entity.JobStatus;
 import com.hirehub.entity.User;
 import com.hirehub.repository.JobRepository;
 import com.hirehub.repository.UserRepository;
@@ -35,7 +36,7 @@ public class JobApplicationController {
 		
 //		System.out.println("Principal = " + principal);
 		
-		if (!job.isApproved()) {
+		if (job.getStatus() != JobStatus.APPROVED) {
 			throw new RuntimeException("Cannot apply to an unapproved job!");
 		}
 		

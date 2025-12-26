@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hirehub.entity.Job;
+import com.hirehub.entity.JobStatus;
 import com.hirehub.repository.JobRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,20 +24,20 @@ public class JobSeekerJobController {
 	// Get only approved jobs for job seekers
 	@GetMapping("/approved")
 	public List<Job> getApprovedJobs(){
-		return jobRepository.findByApprovedTrue();
+		return jobRepository.findByStatus(JobStatus.APPROVED);
 	}
 	
 	 // Get job by ID
 	@GetMapping("/{id}")
 	public Job getJobById(@PathVariable Long id) {
 		return jobRepository.findById(id)
-				.filter(Job::isApproved)
+				.filter(job -> job.getStatus() == JobStatus.APPROVED)
 				.orElseThrow(() -> new RuntimeException("Job not found or not approved!"));
 	}
 	
 	@GetMapping("/search")
 	public List<Job> searchJobs(@RequestParam String keyword){
-		return jobRepository.findByApprovedTrue()
+		return jobRepository.findByStatus(JobStatus.APPROVED)
 				.stream()
 				.filter(job -> job.getTitle().toLowerCase().contains(keyword.toLowerCase())
 						|| job.getSkills().toLowerCase().contains(keyword.toLowerCase())

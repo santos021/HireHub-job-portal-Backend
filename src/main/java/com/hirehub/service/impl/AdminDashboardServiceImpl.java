@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.hirehub.dto.AdminDashboardStatsResponse;
 import com.hirehub.dto.PendingJobResponse;
 import com.hirehub.entity.Job;
+import com.hirehub.entity.JobStatus;
 import com.hirehub.repository.JobRepository;
 import com.hirehub.repository.UserRepository;
 import com.hirehub.service.AdminDashboardService;
@@ -34,7 +35,7 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
 	@Override
 	public List<PendingJobResponse> getPendingJobs() {
 		
-		List<Job> jobs = jobRepository.findByApprovedFalse();
+		List<Job> jobs = jobRepository.findByStatus(JobStatus.PENDING);
 		
 		return jobs.stream().map(job -> {
 			PendingJobResponse dto = new PendingJobResponse();

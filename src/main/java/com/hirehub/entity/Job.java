@@ -3,6 +3,8 @@ package com.hirehub.entity;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,7 +29,9 @@ public class Job {
 	private String experienceLevel;
 	private String jobType;
 	
-	private boolean approved = false; // admin approval
+//	private boolean approved = false; // admin approval
+	@Enumerated(EnumType.STRING)
+	private JobStatus status = JobStatus.PENDING;
 	
 	private LocalDateTime createdAt = LocalDateTime.now();
 	

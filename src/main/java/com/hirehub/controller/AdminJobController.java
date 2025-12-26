@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hirehub.entity.Job;
+import com.hirehub.entity.JobStatus;
 import com.hirehub.repository.JobRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,17 +30,14 @@ public class AdminJobController {
 	
 	@GetMapping("/pending")
 	public List<Job> getPendingJobs(){
-		return jobRepository.findAll()
-				.stream()
-				.filter(job -> !job.isApproved())
-				.toList();
+		return jobRepository.findByStatus(JobStatus.PENDING);
 	}
 	
 	@PutMapping("/{id}/approve")
 	public String approveJob(@PathVariable Long id) {
 		Job job = jobRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Job not found"));
-		job.setApproved(true);
+		job.setStatus(JobStatus.APPROVED);
 		jobRepository.save(job);
 		
 		return "Job approved successfully!";
@@ -50,7 +48,7 @@ public class AdminJobController {
 		Job job = jobRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Job not found"));
 		
-		job.setApproved(false);
+		job.setStatus(JobStatus.REJECTED);
 		jobRepository.save(job);
 		
 		return "Job rejected!";
